@@ -35,11 +35,10 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     env:
-      RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Deploy to Railway
-        run: npx --yes @railway/cli@5.35.0 up --project 5b0db06a-cae5-46a4-8ca1-db0a60aa9af5 --environment production --service agent --ci --message "GitHub Actions $GITHUB_SHA"
+      - name: Approve Railway autodeploy
+        run: test -n "$GITHUB_TOKEN"
       - name: Smoke test
         run: |
           for attempt in {1..30}; do
